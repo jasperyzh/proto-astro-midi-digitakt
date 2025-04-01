@@ -177,6 +177,15 @@ export function useMidiConnection() {
     const messageCallback = (event) => {
       // Store the received message
       midiState.lastInputMessage = event;
+
+      console.log("🎹 [MIDI DEBUG] Received message:", event);
+
+      /**
+       * 
+       * there is no event.note available, however in midi-setup.js, there is setupInputListeners under input.addListener 'midimessage' able to return event.note.name, event.note.octave?
+       * 
+       * find out why the differences, and fix these
+       */
       
       // Create a structured message object for the log
       const logEntry = {
@@ -226,7 +235,7 @@ export function useMidiConnection() {
       // Log the message to the MIDI debugger
       logMessage(logEntry);
       
-      console.log(`Received from ${input.name}:`, logEntry.message);
+      // console.log(`Received from ${input.name}:`, logEntry.message);
     };
     
     // Setup listeners with our callback

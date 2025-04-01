@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, reactive } from 'vue';
+import { onMounted, onUnmounted, ref, reactive, defineExpose } from 'vue';
 import { useMidiConnection } from '../../composables/useMidiConnection';
 import { midiState, sendCC, sendNRPN } from '../../stores/midiStore';
 
@@ -75,6 +75,9 @@ const props = defineProps({
     default: 0 // MIDI channel 1
   }
 });
+
+// Explicitly expose an empty object (might help tooling)
+defineExpose({});
 
 // Initialize selectedChannel with the prop value
 const selectedChannel = ref(props.channel);

@@ -14,25 +14,40 @@
       </div>
     </div>
     
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       <div 
         v-for="param in parameters" 
         :key="param.id" 
         class="flex flex-col items-center"
       >
-        <div class="text-center mb-2">{{ param.name }}</div>
-        
-        <div v-if="param.type === 'knob'" class="mb-2">
-          <div class="digitakt-knob relative" @mousedown="startDrag($event, param)" @touchstart="startDrag($event, param)">
+        <!-- Knob Control -->
+        <div v-if="param.type === 'knob'" class="flex flex-col items-center mb-2 w-full">
+          <!-- Combined Label -->
+          <div class="text-center text-xs mb-1 truncate w-full" :title="param.name"> 
+            {{ param.name }} 
+            <span v-if="param.cc !== undefined" class="text-gray-400">(CC:{{ param.cc }})</span>
+            <span v-else-if="param.nrpn !== undefined" class="text-gray-400">(NRPN:{{ param.nrpn }})</span>
+          </div>
+          <!-- Knob Visual -->
+          <div class="digitakt-knob relative mb-1" @mousedown="startDrag($event, param)" @touchstart="startDrag($event, param)">
             <div 
               class="absolute w-1 h-6 bg-digitakt-text" 
               :style="getKnobRotationStyle(param.value, param.min, param.max)"
             ></div>
           </div>
-          <div class="text-center mt-1">{{ param.value }}</div>
+          <!-- Value Display -->
+          <div class="text-center text-sm font-mono">{{ param.value }}</div>
         </div>
         
-        <div v-else-if="param.type === 'slider'" class="w-full">
+        <!-- Slider Control -->
+        <div v-else-if="param.type === 'slider'" class="w-full flex flex-col items-center mb-2">
+          <!-- Combined Label -->
+          <div class="text-center text-xs mb-1 truncate w-full" :title="param.name">
+            {{ param.name }}
+            <span v-if="param.cc !== undefined" class="text-gray-400">(CC:{{ param.cc }})</span>
+            <span v-else-if="param.nrpn !== undefined" class="text-gray-400">(NRPN:{{ param.nrpn }})</span>
+          </div>
+          <!-- Slider Input -->
           <input 
             type="range"
             v-model.number="param.value"
@@ -40,24 +55,36 @@
             :max="param.max"
             :step="param.step || 1"
             class="digitakt-slider w-full"
-            @change="sendParameterChange(param)"
+            @input="sendParameterChange(param)"
           />
-          <div class="flex justify-between text-xs mt-1">
+          <!-- Value/Range Display -->
+          <div class="flex justify-between text-xs mt-1 w-full font-mono">
             <span>{{ param.min }}</span>
-            <span>{{ param.value }}</span>
+            <span class="font-bold">{{ param.value }}</span>
             <span>{{ param.max }}</span>
           </div>
         </div>
         
-        <div v-else-if="param.type === 'toggle'" class="flex items-center">
+        <!-- Toggle Control -->
+        <div v-else-if="param.type === 'toggle'" class="flex flex-col items-center mb-2 w-full">
+          <!-- Combined Label -->
+          <div class="text-center text-xs mb-1 truncate w-full" :title="param.name">
+            {{ param.name }}
+            <span v-if="param.cc !== undefined" class="text-gray-400">(CC:{{ param.cc }})</span>
+            <span v-else-if="param.nrpn !== undefined" class="text-gray-400">(NRPN:{{ param.nrpn }})</span>
+          </div>
+          <!-- Toggle Button -->
           <button 
             @click="toggleParameter(param)"
-            class="digitakt-button" 
+            class="digitakt-button px-3 py-1" 
             :class="{ 'bg-digitakt-accent text-black': param.value === param.max }"
           >
-            {{ param.value === param.min ? 'OFF' : 'ON' }}
+            {{ param.value === param.min ? (param.offLabel || 'OFF') : (param.onLabel || 'ON') }}
+            <!-- Show value if not simple ON/OFF -->
+            <span v-if="param.offLabel === undefined && param.onLabel === undefined" class="font-mono">({{ param.value }})</span>
           </button>
         </div>
+
       </div>
     </div>
   </div>

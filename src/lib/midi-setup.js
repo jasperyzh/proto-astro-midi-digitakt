@@ -95,11 +95,11 @@ export function setupInputListeners(input, onMidiMessage) {
     
     // Listen for all message types
     input.addListener("midimessage", event => {
-      console.log("MIDI Message Received:", 
+      /* console.log("MIDI Message Received:", 
         event.message.type, 
         "Channel:", event.message.channel,
         "Data:", event.message.data
-      );
+      ); */
       
       if (typeof onMidiMessage === "function") {
         onMidiMessage(event);
@@ -117,16 +117,17 @@ export function setupInputListeners(input, onMidiMessage) {
     
     input.addListener("noteon", event => {
       console.log("Note On Received:", 
+        event,
         "Note:", event.note.name + event.note.octave,
         "Velocity:", event.velocity,
-        "Channel:", event.channel
+        "Channel:", event.message.channel
       );
     });
     
     input.addListener("noteoff", event => {
       console.log("Note Off Received:", 
         "Note:", event.note.name + event.note.octave,
-        "Channel:", event.channel
+        "Channel:", event.message.channel
       );
     });
     

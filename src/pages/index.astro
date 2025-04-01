@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import MidiConnection from '../components/midi/MidiConnection.vue';
 import MidiMonitor from '../components/midi/MidiMonitor.vue';
 import ParameterControl from '../components/midi/ParameterControl.vue';
-import CustomParameterControl from '../components/midi/CustomParameterControl.vue';
+import CustomParameterControlComponent from '../components/midi/CustomParameterControl.vue';
 import PresetManager from '../components/midi/PresetManager.vue';
 import { parameterGroups } from '../data/digitaktParameters';
 
@@ -26,47 +26,60 @@ import { parameterGroups } from '../data/digitaktParameters';
 		<div class="md:col-span-2">
 			<h2 class="text-2xl font-bold mb-4 text-digitakt-accent">Digitakt Parameters</h2>
 			
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				<ParameterControl
 					client:load
-					title={parameterGroups.midiTrack.title}
-					parameters={parameterGroups.midiTrack.parameters}
-					channel={parameterGroups.midiTrack.channel}
+					title={parameterGroups.source.title}
+					parameters={parameterGroups.source.parameters}
+					channel={parameterGroups.source.channel}
 				/>
-				
 				<ParameterControl
 					client:load
 					title={parameterGroups.filter.title}
 					parameters={parameterGroups.filter.parameters}
 					channel={parameterGroups.filter.channel}
 				/>
-				
 				<ParameterControl
 					client:load
 					title={parameterGroups.amp.title}
 					parameters={parameterGroups.amp.parameters}
 					channel={parameterGroups.amp.channel}
 				/>
-				
 				<ParameterControl
 					client:load
-					title={parameterGroups.lfo.title}
-					parameters={parameterGroups.lfo.parameters}
-					channel={parameterGroups.lfo.channel}
+					title={parameterGroups.lfo1.title}
+					parameters={parameterGroups.lfo1.parameters}
+					channel={parameterGroups.lfo1.channel}
 				/>
-				
+				<ParameterControl
+					client:load
+					title={parameterGroups.lfo2.title}
+					parameters={parameterGroups.lfo2.parameters}
+					channel={parameterGroups.lfo2.channel}
+				/>
 				<ParameterControl
 					client:load
 					title={parameterGroups.delay.title}
 					parameters={parameterGroups.delay.parameters}
 					channel={parameterGroups.delay.channel}
 				/>
-				
 				<ParameterControl
 					client:load
 					title={parameterGroups.reverb.title}
 					parameters={parameterGroups.reverb.parameters}
 					channel={parameterGroups.reverb.channel}
+				/>
+				<ParameterControl
+					client:load
+					title={parameterGroups.compressor.title}
+					parameters={parameterGroups.compressor.parameters}
+					channel={parameterGroups.compressor.channel}
+				/>
+				<ParameterControl
+					client:load
+					title={parameterGroups.midiTrackVal.title}
+					parameters={parameterGroups.midiTrackVal.parameters}
+					channel={parameterGroups.midiTrackVal.channel}
 				/>
 			</div>
 		</div>
@@ -75,54 +88,10 @@ import { parameterGroups } from '../data/digitaktParameters';
 	<div class="mt-8 mb-8">
 		<h2 class="text-2xl font-bold mb-4 text-digitakt-accent">Custom Controls</h2>
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-			<CustomParameterControl
+			<CustomParameterControlComponent
 				client:load
 				title="Custom MIDI Controls"
 				channel={0}
-			/>
-			
-			<CustomParameterControl
-				client:load
-				title="Custom VAL Controls"
-				channel={8}
-				initialParameters={[
-					{
-						id: "custom_val1",
-						name: "VAL1 CC70",
-						type: "knob",
-						min: 0,
-						max: 127,
-						value: 0,
-						cc: 70
-					},
-					{
-						id: "custom_val2",
-						name: "VAL2 CC71",
-						type: "knob",
-						min: 0,
-						max: 127,
-						value: 0,
-						cc: 71
-					},
-					{
-						id: "custom_val5",
-						name: "VAL5 CC74",
-						type: "knob",
-						min: 0,
-						max: 127,
-						value: 0,
-						cc: 74
-					},
-					{
-						id: "custom_val8",
-						name: "VAL8 CC77",
-						type: "knob",
-						min: 0,
-						max: 127,
-						value: 0,
-						cc: 77
-					}
-				]}
 			/>
 		</div>
 	</div>

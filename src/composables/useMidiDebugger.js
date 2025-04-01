@@ -1,26 +1,28 @@
 import { ref, reactive } from 'vue';
 
+// Create shared state outside the function so it persists across imports
+const messageLog = ref([]);
+const MAX_LOG_SIZE = 100;
+
+const debugState = reactive({
+  latency: {
+    lastMessageTime: null,
+    averageLatency: null,
+    measurements: []
+  },
+  errors: [],
+  statistics: {
+    totalMessages: 0,
+    messagesByType: {},
+    messagesByChannel: {}
+  }
+});
+
 /**
  * Composable for MIDI message debugging and monitoring
+ * Uses a singleton pattern to share state across imports
  */
 export function useMidiDebugger() {
-  const messageLog = ref([]);
-  const MAX_LOG_SIZE = 100;
-  
-  const debugState = reactive({
-    latency: {
-      lastMessageTime: null,
-      averageLatency: null,
-      measurements: []
-    },
-    errors: [],
-    statistics: {
-      totalMessages: 0,
-      messagesByType: {},
-      messagesByChannel: {}
-    }
-  });
-  
   /**
    * Log a MIDI message with detailed information
    * @param {Object} message The MIDI message to log
@@ -30,6 +32,8 @@ export function useMidiDebugger() {
     if (!message.timestamp) {
       message.timestamp = Date.now();
     }
+
+    console.warn("🔍 [MIDI DEBUGGER] Logging message:", message);
     
     // Update latency tracking
     if (debugState.latency.lastMessageTime) {
@@ -65,6 +69,8 @@ export function useMidiDebugger() {
       }
       debugState.statistics.messagesByChannel[message.channel]++;
     }
+    
+    console.warn("🔍 [MIDI DEBUGGER] Adding message to log:", JSON.stringify(message.details || {}, null, 2));
     
     // Add to log
     messageLog.value.unshift(message);
