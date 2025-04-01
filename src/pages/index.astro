@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MidiConnection from '../components/midi/MidiConnection.vue';
+import MidiMonitor from '../components/midi/MidiMonitor.vue';
+import ParameterControl from '../components/midi/ParameterControl.vue';
+import CustomParameterControl from '../components/midi/CustomParameterControl.vue';
+import PresetManager from '../components/midi/PresetManager.vue';
+import { parameterGroups } from '../data/digitaktParameters';
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+	<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+		<div class="md:col-span-1">
+			<MidiConnection client:load />
+			<div class="mt-6">
+				<PresetManager client:load />
+			</div>
+			<div class="mt-6">
+				<MidiMonitor client:load />
+			</div>
+		</div>
+		
+		<div class="md:col-span-2">
+			<h2 class="text-2xl font-bold mb-4 text-digitakt-accent">Digitakt Parameters</h2>
+			
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<ParameterControl
+					client:load
+					title={parameterGroups.midiTrack.title}
+					parameters={parameterGroups.midiTrack.parameters}
+					channel={parameterGroups.midiTrack.channel}
+				/>
+				
+				<ParameterControl
+					client:load
+					title={parameterGroups.filter.title}
+					parameters={parameterGroups.filter.parameters}
+					channel={parameterGroups.filter.channel}
+				/>
+				
+				<ParameterControl
+					client:load
+					title={parameterGroups.amp.title}
+					parameters={parameterGroups.amp.parameters}
+					channel={parameterGroups.amp.channel}
+				/>
+				
+				<ParameterControl
+					client:load
+					title={parameterGroups.lfo.title}
+					parameters={parameterGroups.lfo.parameters}
+					channel={parameterGroups.lfo.channel}
+				/>
+				
+				<ParameterControl
+					client:load
+					title={parameterGroups.delay.title}
+					parameters={parameterGroups.delay.parameters}
+					channel={parameterGroups.delay.channel}
+				/>
+				
+				<ParameterControl
+					client:load
+					title={parameterGroups.reverb.title}
+					parameters={parameterGroups.reverb.parameters}
+					channel={parameterGroups.reverb.channel}
+				/>
+			</div>
+		</div>
+	</div>
+
+	<div class="mt-8 mb-8">
+		<h2 class="text-2xl font-bold mb-4 text-digitakt-accent">Custom Controls</h2>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<CustomParameterControl
+				client:load
+				title="Custom MIDI Controls"
+				channel={0}
+			/>
+			
+			<CustomParameterControl
+				client:load
+				title="Custom VAL Controls"
+				channel={8}
+				initialParameters={[
+					{
+						id: "custom_val1",
+						name: "VAL1 CC70",
+						type: "knob",
+						min: 0,
+						max: 127,
+						value: 0,
+						cc: 70
+					},
+					{
+						id: "custom_val2",
+						name: "VAL2 CC71",
+						type: "knob",
+						min: 0,
+						max: 127,
+						value: 0,
+						cc: 71
+					},
+					{
+						id: "custom_val5",
+						name: "VAL5 CC74",
+						type: "knob",
+						min: 0,
+						max: 127,
+						value: 0,
+						cc: 74
+					},
+					{
+						id: "custom_val8",
+						name: "VAL8 CC77",
+						type: "knob",
+						min: 0,
+						max: 127,
+						value: 0,
+						cc: 77
+					}
+				]}
+			/>
+		</div>
+	</div>
+
+	<div class="mt-12 p-4 bg-digitakt-secondary rounded-md">
+		<h2 class="text-xl font-bold mb-4">About this Controller</h2>
+		<p class="mb-2">This web-based MIDI controller is designed specifically for the Elektron Digitakt. It uses the Web MIDI API to communicate with your device.</p>
+		<p class="mb-2">To get started:</p>
+		<ol class="list-decimal list-inside mb-4 ml-4">
+			<li class="mb-1">Connect your Digitakt to your computer via USB</li>
+			<li class="mb-1">Click "Initialize MIDI" and select your Digitakt from the dropdown menus</li>
+			<li class="mb-1">Use the parameter controls to adjust settings on your device</li>
+		</ol>
+		<p>The controller supports both CC and NRPN messages. Toggle the NRPN switch for higher precision control.</p>
+	</div>
+</Layout>
